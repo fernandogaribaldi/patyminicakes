@@ -74,8 +74,6 @@ footer a {
   opacity: 0.9;
 }
 
-/* Modal */
-
 #modal {
   display: none;
   position: fixed;
@@ -88,7 +86,6 @@ footer a {
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  touch-action: none;
 }
 
 #modal-img {
@@ -96,5 +93,4 @@ footer a {
   max-height: 90%;
   border-radius: 10px;
   transition: transform 0.2s ease;
-  background: white;
 }
