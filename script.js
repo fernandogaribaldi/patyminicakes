@@ -9,9 +9,14 @@ const imagens = [
   // Adicione mais nomes de imagens aqui
 ];
 
-const container = document.getElementById('cardapio');
+let imagemAtual = 0;
 
-imagens.forEach(nome => {
+const container = document.getElementById('cardapio');
+const modal = document.getElementById('modal');
+const modalImg = document.getElementById('modal-img');
+
+// Render cards
+imagens.forEach((nome, index) => {
   const img = document.createElement('img');
   img.src = nome;
   img.alt = "Produto Paty Mini Cakes";
@@ -22,20 +27,53 @@ imagens.forEach(nome => {
   card.appendChild(img);
   container.appendChild(card);
 
-  // Adiciona funcionalidade de clique
   img.addEventListener('click', () => {
-    mostrarImagemModal(nome);
+    imagemAtual = index;
+    mostrarImagemModal();
   });
 });
 
-function mostrarImagemModal(imagemSrc) {
-  const modal = document.getElementById('modal');
-  const modalImg = document.getElementById('modal-img');
-
+function mostrarImagemModal() {
   modal.style.display = "flex";
-  modalImg.src = imagemSrc;
+  modalImg.src = imagens[imagemAtual];
 }
 
 function fecharModal() {
-  document.getElementById('modal').style.display = "none";
+  modal.style.display = "none";
+}
+
+// Suporte a arrastar (touch ou mouse)
+let startY = 0;
+
+modal.addEventListener('touchstart', (e) => {
+  startY = e.touches[0].clientY;
+});
+
+modal.addEventListener('touchend', (e) => {
+  const endY = e.changedTouches[0].clientY;
+  handleSwipe(startY, endY);
+});
+
+modal.addEventListener('mousedown', (e) => {
+  startY = e.clientY;
+});
+
+modal.addEventListener('mouseup', (e) => {
+  const endY = e.clientY;
+  handleSwipe(startY, endY);
+});
+
+function handleSwipe(start, end) {
+  const delta = start - end;
+
+  if (Math.abs(delta) > 50) {
+    if (delta > 0) {
+      // Arrastou para cima
+      imagemAtual = (imagemAtual + 1) % imagens.length;
+    } else {
+      // Arrastou para baixo
+      imagemAtual = (imagemAtual - 1 + imagens.length) % imagens.length;
+    }
+    mostrarImagemModal();
+  }
 }
