@@ -15,7 +15,7 @@ const container = document.getElementById('cardapio');
 const modal = document.getElementById('modal');
 const modalImg = document.getElementById('modal-img');
 
-// Render cards
+// Criação das imagens
 imagens.forEach((nome, index) => {
   const img = document.createElement('img');
   img.src = nome;
@@ -38,20 +38,25 @@ function mostrarImagemModal() {
   modalImg.src = imagens[imagemAtual];
 }
 
-function fecharModal() {
-  modal.style.display = "none";
-}
+// Fechar o modal ao clicar fora da imagem
+modal.addEventListener('click', (e) => {
+  if (e.target === modal) {
+    modal.style.display = "none";
+  }
+});
 
-// Suporte a arrastar (touch ou mouse)
-let startY = 0;
+// SWIPE
+let startY = null;
 
 modal.addEventListener('touchstart', (e) => {
   startY = e.touches[0].clientY;
-});
+}, { passive: true });
 
 modal.addEventListener('touchend', (e) => {
+  if (startY === null) return;
   const endY = e.changedTouches[0].clientY;
   handleSwipe(startY, endY);
+  startY = null;
 });
 
 modal.addEventListener('mousedown', (e) => {
@@ -59,19 +64,20 @@ modal.addEventListener('mousedown', (e) => {
 });
 
 modal.addEventListener('mouseup', (e) => {
+  if (startY === null) return;
   const endY = e.clientY;
   handleSwipe(startY, endY);
+  startY = null;
 });
 
 function handleSwipe(start, end) {
   const delta = start - end;
-
   if (Math.abs(delta) > 50) {
     if (delta > 0) {
-      // Arrastou para cima
+      // cima
       imagemAtual = (imagemAtual + 1) % imagens.length;
     } else {
-      // Arrastou para baixo
+      // baixo
       imagemAtual = (imagemAtual - 1 + imagens.length) % imagens.length;
     }
     mostrarImagemModal();
