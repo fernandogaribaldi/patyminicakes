@@ -15,7 +15,7 @@ imagens.forEach(nomeArquivo => {
   const card = document.createElement('div');
   card.className = 'card';
   card.innerHTML = `
-    <img src="/imagens/${nomeArquivo}" alt="Produto Paty Mini Cakes" />
+    <img src="${nomeArquivo}" alt="Produto Paty Mini Cakes" />
   `;
   container.appendChild(card);
 });
